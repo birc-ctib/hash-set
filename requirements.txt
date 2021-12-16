@@ -6,3 +6,6 @@
 # in the root of the repository. Packages that you install that way will also be
 # available for the workflow that checks submissions on GitHub.
 
+# Modules useful for testing
+doctest
+pytest
