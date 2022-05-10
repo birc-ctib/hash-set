@@ -4,18 +4,17 @@ from typing import (
     Generic, Iterable, TypeVar, Iterator
 )
 
-Key = int
-Val = TypeVar('Val')
+T = TypeVar('T')
 
 
-class HashSet2(Generic[Val]):
+class HashSet(Generic[T]):
     """Set implementation using a hash table."""
 
     size: int
     used: int
-    array: list[list[tuple[Key, Val]]]
+    array: list[list[T]]
 
-    def __init__(self, seq: Iterable[Val] = (), initial_size: int = 16):
+    def __init__(self, seq: Iterable[T] = (), initial_size: int = 16):
         """Create a set from a sequence, optionally with a specified size."""
         seq = list(seq)
 
@@ -29,16 +28,11 @@ class HashSet2(Generic[Val]):
         for value in seq:
             self.add(value)
 
-    def _get_bin(self, k: Key) -> list[tuple[Key, Val]]:
+    def _get_bin(self, element: T) -> list[T]:
         """Get the list (bin) that element should sit in."""
-        return self.array[k % self.size]
-
-    def _bin_contains(self, k: Key, v: Val) -> bool:
-        """Test if the k bin contains v."""
-        for kk, vv in self._get_bin(k):
-            if k == kk:
-                return v == vv
-        return False
+        hash_val = hash(element)
+        index = hash_val % self.size
+        return self.array[index]
 
     def _resize(self, new_size: int) -> None:
         """Change the table size to new_size bins."""
@@ -47,47 +41,40 @@ class HashSet2(Generic[Val]):
         self.used = 0
         self.array = [list() for _ in range(new_size)]
         for b in old_array:
-            for k, v in b:
-                self._add(k, v)
+            for x in b:
+                self.add(x)
 
-    def _add(self, k: Key, v: Val) -> None:
+    def add(self, element: T) -> None:
         """Add element to the set."""
-        if not self._bin_contains(k, v):
-            self._get_bin(k).append((k, v))
+        b = self._get_bin(element)
+        if element not in b:
+            b.append(element)
             self.used += 1
             if self.used > self.size / 2:
                 self._resize(int(2 * self.size))
 
-    def add(self, element: Val) -> None:
-        """Add element to the set."""
-        self._add(hash(element), element)
-
-    def _remove(self, k: Key, v: Val) -> None:
+    def remove(self, element: T) -> None:
         """Remove element from the set."""
-        if not self._bin_contains(k, v):
-            raise KeyError(v)
-        self._get_bin(k).remove((k, v))
+        b = self._get_bin(element)
+        if element not in b:
+            raise KeyError(element)
+        b.remove(element)
         self.used -= 1
         if self.used < self.size / 4:
             self._resize(int(self.size / 2))
 
-    def remove(self, element: Val) -> None:
-        """Remove element from the set."""
-        self._remove(hash(element), element)
-
-    def __iter__(self) -> Iterator[Val]:
+    def __iter__(self) -> Iterator[T]:
         """Iterate through all the elements in the set."""
         for b in self.array:
-            for _, v in b:
-                yield v
+            yield from b
 
     def __bool__(self) -> bool:
         """Test if the set is non-empty."""
         return self.used > 0
 
-    def __contains__(self, element: Val) -> bool:
+    def __contains__(self, element: T) -> bool:
         """Test if element is in the set."""
-        return self._bin_contains(hash(element), element)
+        return element in self._get_bin(element)
 
     def __repr__(self) -> str:
         """Get representation string."""
