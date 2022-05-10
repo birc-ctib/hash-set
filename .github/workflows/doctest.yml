@@ -1,0 +1,24 @@
+name: Doctest
+
+on: [push]
+
+jobs:
+  make-testing:
+    name: Doctest checking
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out repository
+        uses: actions/checkout@v2
+
+      - name: "Installing Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+    
+      - name: "Installing dependencies"
+        run: python3 -m pip install -r requirements.txt
+        shell: bash
+
+      - name: Checking
+        run: python3 -m doctest src/*.py
+        shell: bash

@@ -1,0 +1,10 @@
+# If you need additional packages for your code, add them here, one package per line.
+# You can then install them by running
+#
+# > python3 -m pip install -r requirements.txt
+#
+# in the root of the repository. Packages that you install that way will also be
+# available for the workflow that checks submissions on GitHub.
+
+# Module useful for testing
+pytest
