@@ -1,10 +1,13 @@
-name: Doctest
-
+name: GitHub Classroom Workflow
 on: [push]
-
+permissions:
+  checks: write
+  actions: read
+  contents: read
+  
 jobs:
-  make-testing:
-    name: Doctest checking
+  testing:
+    name: Autograding
     runs-on: ubuntu-latest
     steps:
       - name: Checking out repository
@@ -19,6 +22,10 @@ jobs:
         run: python3 -m pip install -r requirements.txt
         shell: bash
 
-      - name: Checking
+      - name: Checking with doctest
         run: python3 -m doctest src/*.py
+        shell: bash
+
+      - name: Checking with pytest
+        run: if src/test_*.py 2> /dev/null; then python3 -m pytest src; fi
         shell: bash
