@@ -28,6 +28,17 @@ jobs:
 
       - name: Checking with pytest
         run: |
-          if src/test_*.py 2> /dev/null; then python3 -m pytest src; fi
-          if src/*_test.py 2> /dev/null; then python3 -m pytest src; fi
+          if src/test_*.py src/*_test.py 2> /dev/null; then
+            python3 -m pytest src;
+          fi
         shell: bash
+
+      - name: Check if there are project-specific tests
+        id: proj_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: ./.github/actions/project-test/action.yml
+
+      - name: Project testing
+        if: steps.proj_files.outputs.files_exists == 'true'
+        uses: ./.github/actions/project-test

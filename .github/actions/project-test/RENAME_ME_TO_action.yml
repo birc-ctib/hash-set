@@ -1,0 +1,12 @@
+name: Project specific tests
+description: Run project specific tests
+runs:
+  using: composite
+  steps:
+      # Example from FASTA exercise
+      - name: Running fasta recs test
+        run:  ./.test/test-fasta-recs.sh
+        shell: bash
+      - name: Running get subseqs test
+        run:  ./.test/test-get-subseqs.sh
+        shell: bash
