@@ -28,7 +28,7 @@ jobs:
 
       - name: Checking with pytest
         run: |
-          if ls src/test_*.py src/*_test.py 2> /dev/null; then
+          if ls src/test_*.py || ls src/*_test.py 2> /dev/null; then
             python3 -m pytest src;
           fi
         shell: bash
