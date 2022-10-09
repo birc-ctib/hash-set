@@ -1,0 +1,14 @@
+{
+    "tests": [
+        {
+            "name": "Hello, world!",
+            "setup": "",
+            "run": "echo Hello, World!",
+            "input": "",
+            "output": "Hello, World!",
+            "comparison": "exact",
+            "timeout": 10,
+            "points": 1
+        }
+    ]
+}
