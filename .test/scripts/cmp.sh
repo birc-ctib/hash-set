@@ -13,6 +13,13 @@ if ! cmp $obs $exp; then
     echo "------------------------------------"
     cat $obs
     echo "------------------------------------"
+    echo "Diff:"
+    echo "------------------------------------"
+    diff --unchanged-line-format='' \
+         --old-line-format="${exp}[%dn]: %L" \
+         --new-line-format="${obs}[%dn]: %L" \
+         $exp $obs
+    echo "------------------------------------"
     exit 2
 fi
 
