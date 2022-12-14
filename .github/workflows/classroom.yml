@@ -1,0 +1,44 @@
+name: GitHub Classroom Workflow
+on: [push]
+permissions:
+  checks: write
+  actions: read
+  contents: read
+  
+jobs:
+  testing:
+    name: Autograding
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out repository
+        uses: actions/checkout@v2
+
+      - name: "Installing Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+    
+      - name: "Installing dependencies"
+        run: python3 -m pip install -r requirements.txt
+        shell: bash
+
+      - name: Checking with doctest
+        run: python3 -m doctest src/*.py
+        shell: bash
+
+      - name: Checking with pytest
+        run: |
+          if ls src/test_*.py || ls src/*_test.py 2> /dev/null; then
+            python3 -m pytest src;
+          fi
+        shell: bash
+
+      - name: Check if there are project-specific tests
+        id: proj_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: ./.github/actions/project-test/action.yml
+
+      - name: Project testing
+        if: steps.proj_files.outputs.files_exists == 'true'
+        uses: ./.github/actions/project-test

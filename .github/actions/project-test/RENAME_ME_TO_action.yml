@@ -1,0 +1,7 @@
+name: Project specific tests
+description: Run project specific tests
+runs:
+  using: composite
+  steps:
+      - name: Run autograding
+        uses: education/autograding@v1
