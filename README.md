@@ -1,6 +1,6 @@
 # Hash table set
 
-I will not ask you to implement a complete hash table yourself, although I don't think it will be a problem for such excellent students as yourself, but I have an implementation that I would like to ask you to improve. That implementaion can be found in `src/hashset.py`. The problem I have with it is that resizing is more expensive than it should be.
+We will not ask you to implement a complete hash table yourself, although we obviously don't think it would be a problem for such excellent students as yourself... Here is an implementation that we would like to ask you to improve, though. That implementaion can be found in `src/hashset.py`. The problem is that resizing is more expensive than it should be.
 
 The resizing functionality looks like this:
 
@@ -16,9 +16,9 @@ The resizing functionality looks like this:
                 self.add(x)
 ```
 
-Whenever I need to change the table's size, I first get hold of the old array of bins and replace it with a new of the desired size. Then I run through all the bins in it, then all the elements in a bin, and I insert each element using `self.add(x)`. There is nothing seriously wrong with that; when I call `self.add(x)` the table is already updated with the new array and everything works correctly. However, there is one potentially expensive operation that I would like to avoid.
+Whenever we need to change the table's size, we first get hold of the old array of bins and replace it with a new of the desired size. Then we run through all the bins in it, then all the elements in a bin, and each element is inserted using `self.add(x)`. There is nothing seriously wrong with that; when calling `self.add(x)` the table is already updated with the new array and everything works correctly. However, there is one potentially expensive operation that should be avoided.
 
-In `add()` I do this:
+In `add()` we do this:
 
 ```python
     def add(self, element: T) -> None:
@@ -36,6 +36,6 @@ where `_get_bin()` looks like this:
         return self.array[index]
 ```
 
-The problem is that computing the hash value, `hash(element)`, can be a costly operation. The hash value of an element should never change, (if it does, you have a big problem), so the elements I already have in my table will have the same hash value before and after I resize. If I save the hash key together with the values in the table, I don't have to compute `hash(element)` again in a resize. I still have to compute the index, `hash_val % self.size`, because `self.size` changes, but that is a fast operation compared to what `hash()` could be.
+The problem is that computing the hash value, `hash(element)`, can be a costly operation. The hash value of an element should never change, (if it does, you have a big problem), so the elements we already have in my table will have the same hash value before and after resizing. If we save the hash key together with the values in the table, we don't have to compute `hash(element)` again in a resize. We still have to compute the index, `hash_val % self.size`, because `self.size` changes, but that is a fast operation compared to what `hash()` could be.
 
-In `src/hashset2.py` I have copied the original hash table code. Can you change it, so the bins contain pairs of keys and values, so you don't have to compute `hash(x)` when you resize? You will have to touch almost the entire implementation to handle that the values in the lists are now pairs, but I have faith that you can work that out.
+In `src/hashset2.py` there is a copy the original hash table code. Can you change it, so the bins contain pairs of keys and values, so you don't have to compute `hash(x)` when you resize? You will have to touch almost the entire implementation to handle that the values in the lists are now pairs.
